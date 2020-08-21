@@ -1,0 +1,28 @@
+---
+title: "SucesionFibonacci"
+author: "Alejandro Cebrián del Valle"
+date: "19/08/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Sucesión Fibonacci
+
+La sucesión Fibonacci ($F_n$) es una sucesión infinita que empieza con los numeros 0 y 1 que cumple la relación de recurrencia <<cada término es la suma de los dos anteriores>>. Fue descrita ya en el siglo XIII por Leonardo de Pisa, alias *Fibonacci*. La importancia de esta sucesión ha sido tal que ha fascinado desde hace mucho a personas tanto matemáticas como ha naturalistas^[Para quien le guste, recomiendo este video de [Derivando](https://www.youtube.com/watch?v=yDyMSliKsxI)]. La sucesión Fibonacci se obtiene:
+
+$$ F_n = \left\lbrace\begin{array}{cc}
+                  0 & \mbox{Si } n = 0\\
+                  1 & \mbox{Si } n = 1\\
+                  F_{n-2} + F_{n-1} & \mbox{Si } n > 1\\
+                \end{array}\qquad \forall n \in N\right.
+$$
+
+La sucesión Fibonacci puede ser abordada desde muchos campos de la computación. Se pueden obtener términos de la sucesión mediante recurrencia, mediante programación dinámica... En cualquier caso, en las siguientes secciones se verán varios encajes para resolver tanto la obtención de términos como saber el término dada una posición.
+
+## Resolución
+### Pseudocódigo
+### Resolución en Python
+### Resolución en R
