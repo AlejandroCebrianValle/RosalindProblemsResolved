@@ -17,3 +17,5 @@ recursiveFibonacciSequence(1) # 1
 recursiveFibonacciSequence(6) # 8
 recursiveFibonacciSequence(9) # 34
 recursiveFibonacciSequence(22) # 17711
+
+## Binary search
