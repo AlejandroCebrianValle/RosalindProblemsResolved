@@ -9,6 +9,7 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+rm = list(ls())
 ```
 # Sucesión Fibonacci
 
@@ -34,19 +35,17 @@ $$
   F_n = \dfrac{F_{n-2} + F_{n+1}}{2}
 $$
 
-* El máximo común divisor de dos números de Fibonacci sualesquiera es otro número de Fibonacci
+* El máximo común divisor de dos números de Fibonacci cualesquiera es otro número de Fibonacci.
 * La suma infinita de los término de la sucesión $\frac{F_n}{10}$ es $\frac{10}{89}$, siendo el 89 un número de Fibonacci, concretamente, el *décimo*.
 
 ## Resolución
 La sucesión Fibonacci puede ser abordada desde muchos campos de la computación. Se pueden obtener términos de la sucesión mediante recurrencia, mediante programación dinámica... En cualquier caso, en las siguientes secciones se verán varios encajes para resolver tanto la obtención de términos como saber el término dada una posición. De esta manera, se proponen tres soluciones:
 
-* __Mediante función recursiva__: esto es, una función que dado un ordinal, da el número que corresponde a la serie (esto es, introducido el 8, da el octavo número de la serie). El funcionamiento de esta función es el que sigue: se evaluan tres resultados, si $n$ es 0, devuelve 0; si $n$ es 1, devuelve 1; y si es mayor que uno, la función devuelve la suma de la función del número anterior más el número antepenúltimo.
+* __Mediante función recursiva__: una función que dado un ordinal, da el número que corresponde a la serie (esto es, introducido el 8, da el octavo número de la serie). El funcionamiento de esta función es el que sigue: se evaluan tres resultados, si $n$ es 0, devuelve 0; si $n$ es 1, devuelve 1; y si es mayor que uno, la función devuelve la suma de la función del número anterior más el número antepenúltimo.
 
 \begin{algorithm}[H]
   \SetAlgoLined
-  \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Input{Numero natural n}
   \KwResult{n-ésima posición de secuencia Fibonacci}
   \SetKwProg{Def}{Fn}{:}{}
   \BlankLine
@@ -65,9 +64,7 @@ La sucesión Fibonacci puede ser abordada desde muchos campos de la computación
 
 \begin{algorithm}[H]
   \SetAlgoLined
-  \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Input{Numero natural n}
   \KwResult{n-ésima posición de secuencia Fibonacci}
   \SetKwProg{Def}{Fn}{:}{}
   \BlankLine
@@ -81,7 +78,7 @@ La sucesión Fibonacci puede ser abordada desde muchos campos de la computación
   }
   \caption{Pseudocódigo de la función de programación dinámica.}
 \end{algorithm}
-* __Mediante matrices__: existe una forma de calcular mediante la elevación a la n-ésima potencia de la matriz 
+* __Mediante matrices__: existe una forma de calcular^[Según lo visto en [Proof of this result related to Fibonacci numbers? (2011, September 5); Mathematics Stack Exchange..](https://math.stackexchange.com/questions/61997/proof-of-this-result-related-to-fibonacci-numbers-beginpmatrix11-10-end)] mediante la elevación a la n-ésima potencia de la matriz $\left(\begin{array}{cc}1 & 1\\1 & 0\\\end{array}\right)$, tal que:
 $$ \left(\begin{array}{cc}
   1 & 1\\
   1 & 0\\
@@ -93,9 +90,7 @@ $$
 
 \begin{algorithm}[H]
   \SetAlgoLined
-  \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Input{Numero natural n}
   \KwResult{n-ésima posición de secuencia Fibonacci}
   \SetKwProg{Def}{Fn}{:}{}
   \BlankLine
@@ -202,4 +197,118 @@ cat(sprintf("Matrix:\t%d\t%d\n", matrixFibonacciSeq(9),
             matrixFibonacciSeq(22)))
 
 ```
+\newpage
+# Búsqueda Binaria
 
+La búsqueda binaria es un algoritmo del tipo << Dividir-y-Conquistar >>^[Los fans del mundo latino, que creemos en las *limes* a este lado del Rhin y del Canal de la mancha, diriamos: *divide et vinces, divide ut imperes y divide ut regnes*]. Esta estrategia consiste en dividir el problema en problemas más pequeños a la misma instancia; resolver esos subproblemas y la combinación apropiada de las respuestas (Dasgupta, Papadimitriou, Vazirani; *Algorithms*; McGraw-Hill; 2006.). De esta manera, el problema se hace poco a poco en tres partes: particionando el problema en subproblemas, y así recursivamente hasta que el problema es totalmente resoluble; y la posterior aglutinación.
+
+Para encontrar una clave o índice k en un largo archivo que contiene A[1,$\dots$, n] claves ordenadas, primeramente se compara k con la mediana del vector ordenado y, dependiendo de si es mayor o menor, se busca en la primera o segunda mitad del subvector que deja por encima o por debajo la mediana. 
+
+Existen distintas formas de aplicación de este tipo búsquedas, algunas de las cuales implican el uso de árboles binarios. En este caso, habrá que ceñirse a lo propuesto: dado un archivo de 4 lineas, la primera da el número de términos que que tiene el vector ordenado, la segunda el de orden aleatorio, la tercera el vector ordenado de números (rango de número desde $[-10^5, 10^5]$); y la cuarta y última el vector desordenado.
+
+Se busca saber la posición en el vector ordenado de cada término de vector desordenado.
+
+## Resolución
+### Pseudocódigo
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \SetKwInOut{Output}{Output}
+  \KwResult{Indice del término buscado}
+  \SetKwProg{Def}{Fn}{:}{}
+  \BlankLine
+  \Def{binarySearch(array : array, item : int[,str,...])}{
+    lowestValue $\leftarrow$ 0\;
+    maxValue $\leftarrow$ array.lenth - 1\;
+    index = -1\;
+    \While{lowestValue <= maxValue}{
+      midValue = lowestValue + maxValue / 2\;
+      \uIf{array[midValue] == item}{
+        \Return midValue
+      } \eIf{item < array[midValue]}{
+        maxValue $\leftarrow$  mid + 1\;
+      }{
+        lowestValue $\leftarrow$ mid + 1\;
+      }
+    }
+  }
+  \caption{Pseudocódigo de la implementación de la búsqueda binaria.}
+\end{algorithm}
+\newpage
+### Resolución en Python
+```{python}
+### Auxiliar function
+def readRosalindArchive(nameFile):
+   lines = []
+   with open(nameFile, "r") as fileContent:
+      for line in fileContent:
+         lines.append(line.replace("\n", "").split())
+   lines[0] = int("".join(lines[0]))
+   lines[1] = int("".join(lines[1]))
+   lines[2] = [int(x) for x in lines[2]]
+   lines[3] = [int(y) for y in lines[3]]
+   return lines
+### Binary search function
+def binarySearch(array, item):
+   init = 0
+   end = len(array) - 1
+   index = -1
+   while init <= end:
+      mid = (init + end) // 2
+      if item == array[mid]:
+         index = mid
+         break
+      else:
+         if item < array[mid]:
+            end = mid -1
+         else:
+            init = mid + 1
+   return index
+### Probe Section
+dataset = readRosalindArchive("rosalind-BinarySearch.txt")
+results = []
+for elem in dataset[3]:
+  index = binarySearch(dataset[2], elem)
+  if index != -1:
+     index += 1
+  results += [index]
+print(" ".join([str(result) for result in results]))
+```
+\newpage
+### Resolución en R
+
+```{r}
+### Binary search function
+binarySearch <- function(arraySearch, item){
+  lowValue <- 0;
+  maxValue <- length(arraySearch) - 1;
+  index <- -1;
+  while (lowValue <= maxValue){
+    mid = (lowValue + maxValue) %/% 2;
+    if (item == arraySearch[mid]){
+      index = mid;
+      break;
+    } else {
+      if (item < arraySearch[mid]){
+        maxValue <- mid - 1;
+      } else {
+        lowValue <- mid + 1;
+      }
+    }
+  }
+  return(index);
+}
+### Probe Section
+##### First, we read the archive. The Unique important section is the 3rd and 
+##### 4th line.
+fileLines <- readLines("rosalind-BinarySearch.txt");
+arrayOrdered <- as.numeric(unlist(strsplit(fileLines[3]," ")));
+arrayUnordered <- as.numeric(unlist(strsplit(fileLines[4]," ")));
+##### Second, lets search...
+results <- c();
+for (element in arrayUnordered) {
+  results <- append(results, binarySearch(arrayOrdered, element));
+}
+cat(results)
+```
+\newpage
+# ajfkajfkajf

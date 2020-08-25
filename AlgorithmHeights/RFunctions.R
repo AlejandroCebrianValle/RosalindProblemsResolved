@@ -1,3 +1,11 @@
+rm = list(ls())
+
+##############################################################################
+##
+##             Fibonacci Sequence
+##
+##############################################################################
+
 ## Recursive Function to Fibonacci sequence
 recursiveFibonacciSequence <- function(n){
   if(n == 0) {
@@ -40,4 +48,41 @@ cat(sprintf("Dynamic Programation:\t%d\t%d\n", dynamicPFibonacciSequence(9),
 cat(sprintf("Matrix:\t%d\t%d\n", matrixFibonacciSeq(9),
             matrixFibonacciSeq(22)))
 
-## Binary search
+##############################################################################
+##
+##             Binary Search in file
+##
+##############################################################################
+
+### Binary search function
+binarySearch <- function(arraySearch, item){
+  lowValue <- 0;
+  maxValue <- length(arraySearch) - 1;
+  index <- -1;
+  while (lowValue <= maxValue){
+    mid = (lowValue + maxValue) %/% 2;
+    if (item == arraySearch[mid]){
+      index = mid;
+      break;
+    } else {
+      if (item < arraySearch[mid]){
+        maxValue <- mid - 1;
+      } else {
+        lowValue <- mid + 1;
+      }
+    }
+  }
+  return(index);
+}
+### Probe Section
+##### First, we read the archive. The Unique important section is the 3rd and 
+##### 4th line.
+fileLines <- readLines("rosalind-BinarySearch.txt");
+arrayOrdered <- as.numeric(unlist(strsplit(fileLines[3]," ")));
+arrayUnordered <- as.numeric(unlist(strsplit(fileLines[4]," ")));
+##### Second, lets search...
+results <- c();
+for (element in arrayUnordered) {
+  results <- append(results, binarySearch(arrayOrdered, element));
+}
+cat(results)
