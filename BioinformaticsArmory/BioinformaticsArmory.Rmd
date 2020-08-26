@@ -1,0 +1,69 @@
+---
+title: "BioinformaticsArmory"
+author: "Alejandro Cebrián del Valle"
+date: "26/08/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+rm=list(ls())
+library(reticulate)
+knitr::opts_chunk$set(echo = TRUE)
+use_python("/usr/bin/python3.6", required = TRUE)
+py_config()
+Bio <- import("Bio")
+```
+
+# Introducción
+
+Esta sección, siendo prácticos y como dice la propia página de Rosalind, esta sección es más una sección donde poner código que se utiliza de forma más o menos rutinaria y que sirve para que otra gente lo copie y lo utilice. Existen, como siempre, otras formas de hacerlo. En este caso, es lo que buscamos hacer, y si acaso, compararlo.
+
+En este caso, se compara una simple cuenta de nucleótidos. La forma más simple que encuentro, es simplemente crear un diccionario de cada una de las letras. Puede hacerse mediante el método de la clase __String__. En este caso, para que con unos simples cambios permitan hacerlo con k-meros que no se solapen. __Biopython__, permite crear un objeto *secuencia*, que permite usarlo. Por lo que vemos, es más rápido Biopython (quizás, tenga que ver que no tiene que recorrer toda la cadena ;) (como el método count())).
+
+```{python}
+from Bio.Seq import Seq
+from time import time
+### Counting Nucleotides
+def countingNucleotides(sequence):
+    nucleotides = {}
+    for nucl in sequence:
+        if nucl not in nucleotides.keys():
+            nucleotides[nucl] = 1
+        else:
+            nucleotides[nucl] += 1
+    return nucleotides
+
+### The program
+sequence = "CTACATGCCGACATCCATGCCGTAGTGACTATTTTATGATAGGTGTTCGGACATCCACCA" + \
+           "CAATCTGACCAGCGAGTTCGGGCTTCCTTCAACTAATCTTGAATCCATCATCAACCTCGT" + \
+           "GTTAATAGAACGAATTATTTCGTACTTACTTCACCCTAGCCCTTATGGTTTACCCGGCAC" + \
+           "CTGACTAAAGCTAACGCCCTACTCGCCTAGCCTGCCCATTAACCCCATTCGATGCAGATG" + \
+           "CAACTATACTGTGCCTAGCGAAACTCGCCCGCTGGCATGAAAAGAACATAGTCCTTACCT" + \
+           "TAGTGAGCGCACGACACGATCACACATCGAGGGTGGTCGGTTTGTCTAGGAGCGCGTGAC" + \
+           "AATAAAATTTTCTCATAGTTCTATGTTTTGCGGCACTTAGCTTTCGCCCCTCGGTGCGCG" + \
+           "AGAATTCTAGACCATGCGTAATCAAAAACTTCTGGGAAGAAGCACCTAAATAATCCAAAA" + \
+           "ACTAACACCTGGTACAAACTTAGCAATACACAGGCTAGACGATTCGTAGAATGCCTATCG" + \
+           "GTCACGGTAGAGCAATCATGTTATTTTAGCATCTCTATAAGTCTTTTTCGACGGCTACAT" + \
+           "CGTTATATATGGGTATTGTCCCATCATTACGAAAATTGCGGCGGCCTGATATATTCTATT" + \
+           "GGGCATATTGAGACAAAGCCATCAGAACTACGGCTTCGCATGTGTGGTCTACTATGTTGT" + \
+           "AGGACCTGGGATAAACATAATCCTTGCTTCGTTTTTAAGTAGCAGCCGACTCAAACCCTG" + \
+           "CCCTATCAGCAACAGTCCTCTGTTCCAGTTAAAGAAAGGTACAACAAGCTGATCAGTTAG" + \
+           "GACGCCGGAAAACAAACTAAACGACCCGCGGTAATACCGGCGAAATTGGGGGAGGCGTCA" + \
+           "ATGTTCTAAAGGGACTGAGATATAGAAACGACTAACCAGTAGGTTCACACGACTCACGTG" + \
+           "TTATGCTTAGTTCTAGCGACT"
+time1 = time()
+print(" ".join([str(i) for i in countingNucleotides(sequence).values()]))
+time2 = time()
+###### The biopythonic way
+bioSequence = Seq(sequence)
+nucleotideList = [bioSequence.count("A"),
+                  bioSequence.count("C"),
+                  bioSequence.count("G"),
+                  bioSequence.count("T")]
+print(" ".join([str(x) for x in nucleotideList]))
+time3 = time()
+print("The diference between the two times:\n" + \
+      str(time2 - time1) + " (The normal way)\n" + \
+      str(time3 - time2) + " (The biopythonic way)")
+```
+
