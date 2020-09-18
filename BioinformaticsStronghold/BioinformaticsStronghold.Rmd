@@ -1,7 +1,7 @@
 ---
-title: "BioinformaticsArmory"
+title: "BioinformaticsStronghold"
 author: "Alejandro Cebrián del Valle"
-date: "26/08/2020"
+date: "18/09/2020"
 output: pdf_document
 ---
 
@@ -14,9 +14,7 @@ py_config()
 Bio <- import("Bio")
 ```
 
-# Introducción
-
-Esta sección, siendo prácticos y como dice la propia página de Rosalind, esta sección es más una sección donde poner código que se utiliza de forma más o menos rutinaria y que sirve para que otra gente lo copie y lo utilice. Existen, como siempre, otras formas de hacerlo. En este caso, es lo que buscamos hacer, y si acaso, compararlo.
+# Contando Nucleótidos...
 
 En este caso, se compara una simple cuenta de nucleótidos. La forma más simple que encuentro, es simplemente crear un diccionario de cada una de las letras. Puede hacerse mediante el método de la clase __String__. En este caso, para que con unos simples cambios permitan hacerlo con k-meros que no se solapen, __Biopython__ permite crear un objeto *secuencia*, que permite usarlo. Por lo que vemos, es más rápido Biopython (quizás, tenga que ver que no tiene que recorrer toda la cadena ;) (como el método count())).
 
@@ -92,5 +90,4 @@ seqRossalind = paste("CTACATGCCGACATCCATGCCGTAGTGACTATTTTATGATAGGTGTTCGGA" ,
                      "GTTCTAGCGACT", sep  = "")
 table(strsplit(seqRossalind, "")[[1]])
 ```
-
 
